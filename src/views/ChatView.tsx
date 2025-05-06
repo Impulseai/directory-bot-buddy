@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../store';
 import ChatMessage from '../components/ChatMessage';
 import ChatInput from '../components/ChatInput';
-import { v4 as uuidv4 } from 'uuid';
 import { ChatMessage as ChatMessageType, Business } from '../types';
 
 const ChatView: React.FC = () => {
@@ -12,7 +11,8 @@ const ChatView: React.FC = () => {
     addMessage, 
     isTyping, 
     setIsTyping, 
-    searchBusinesses 
+    searchBusinesses,
+    botConfig
   } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [localMessages, setLocalMessages] = useState<ChatMessageType[]>([]);
@@ -125,10 +125,17 @@ const ChatView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
-      <div className="bg-white p-4 rounded-lg shadow flex-1 overflow-y-auto mb-4 custom-scrollbar">
+      <div 
+        className="p-4 rounded-lg shadow flex-1 overflow-y-auto mb-4 custom-scrollbar"
+        style={{ backgroundColor: botConfig.chatBackgroundColor }}
+      >
         <div className="flex flex-col">
           {localMessages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+            <ChatMessage 
+              key={message.id} 
+              message={message} 
+              botConfig={botConfig}
+            />
           ))}
           <div ref={messagesEndRef} />
         </div>

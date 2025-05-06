@@ -22,4 +22,13 @@ export interface BotConfig {
   avatarUrl: string;
   primaryColor: string;
   backgroundColor: string;
+  chatBackgroundColor: string;
+  chatMessageBgColor: string;
+  adminUsername: string;
+  adminPassword: string;
+}
+
+export interface AuthState {
+  isLoggedIn: boolean;
+  username: string;
 }

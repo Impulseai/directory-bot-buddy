@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, ListPlus, Settings } from 'lucide-react';
@@ -10,13 +10,28 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { currentView, setCurrentView, botConfig } = useStore();
+  const { currentView, setCurrentView, botConfig, auth } = useStore();
+
+  // Redirecionar para o login se tentar acessar áreas protegidas sem estar autenticado
+  useEffect(() => {
+    if (currentView === 'admin' && !auth.isLoggedIn) {
+      setCurrentView('login');
+    }
+  }, [currentView, auth.isLoggedIn, setCurrentView]);
+
+  const handleNavigation = (view: 'chat' | 'admin' | 'login') => {
+    if (view === 'admin' && !auth.isLoggedIn) {
+      setCurrentView('login');
+    } else {
+      setCurrentView(view);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
       <header 
-        className="bg-white border-b border-gray-200 py-4 px-6 flex items-center justify-between"
+        className="border-b border-gray-200 py-4 px-6 flex items-center justify-between"
         style={{ backgroundColor: botConfig.backgroundColor }}
       >
         <div className="flex items-center gap-3">
@@ -45,7 +60,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               "w-12 h-12 rounded-lg",
               currentView === 'chat' && "bg-primary/10 text-primary"
             )}
-            onClick={() => setCurrentView('chat')}
+            onClick={() => handleNavigation('chat')}
           >
             <MessageSquare size={24} />
           </Button>
@@ -54,22 +69,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             size="icon"
             className={cn(
               "w-12 h-12 rounded-lg",
-              currentView === 'admin' && "bg-primary/10 text-primary"
+              (currentView === 'admin' || currentView === 'login') && "bg-primary/10 text-primary"
             )}
-            onClick={() => setCurrentView('admin')}
+            onClick={() => handleNavigation('admin')}
           >
             <ListPlus size={24} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              "w-12 h-12 rounded-lg",
-              currentView === 'settings' && "bg-primary/10 text-primary"
-            )}
-            onClick={() => setCurrentView('settings')}
-          >
-            <Settings size={24} />
           </Button>
         </nav>
 

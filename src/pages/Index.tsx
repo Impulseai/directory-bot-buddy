@@ -3,17 +3,17 @@ import React from 'react';
 import Layout from '../components/Layout';
 import ChatView from '../views/ChatView';
 import AdminView from '../views/AdminView';
-import SettingsView from '../views/SettingsView';
+import LoginView from '../views/LoginView';
 import { useStore } from '../store';
 
 const Index = () => {
-  const { currentView } = useStore();
+  const { currentView, auth } = useStore();
 
   return (
     <Layout>
       {currentView === 'chat' && <ChatView />}
-      {currentView === 'admin' && <AdminView />}
-      {currentView === 'settings' && <SettingsView />}
+      {currentView === 'admin' && auth.isLoggedIn && <AdminView />}
+      {currentView === 'login' && <LoginView />}
     </Layout>
   );
 };

@@ -72,6 +72,15 @@ const BusinessForm: React.FC<BusinessFormProps> = ({ business, onClose }) => {
     if (!form.imageUrl.trim()) {
       newErrors.imageUrl = 'URL da imagem é obrigatória';
       valid = false;
+    } else {
+      // Validar se é uma URL ou um formato de imagem válido
+      const isValidUrl = /^(https?:\/\/)/.test(form.imageUrl);
+      const isValidImageFormat = /\.(jpeg|jpg|png|gif|bmp|webp)$/i.test(form.imageUrl);
+      
+      if (!isValidUrl && !isValidImageFormat) {
+        newErrors.imageUrl = 'URL da imagem inválida. Use uma URL completa ou formato de imagem válido (jpeg, jpg, png, gif, bmp, webp)';
+        valid = false;
+      }
     }
     
     setErrors(newErrors);
@@ -140,8 +149,9 @@ const BusinessForm: React.FC<BusinessFormProps> = ({ business, onClose }) => {
             name="imageUrl"
             value={form.imageUrl}
             onChange={handleChange}
-            placeholder="https://example.com/image.jpg"
+            placeholder="https://example.com/image.jpg ou formato da imagem"
           />
+          <p className="text-xs text-gray-500">Aceita URLs ou formatos: jpg, jpeg, png, gif, bmp, webp</p>
           {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl}</p>}
         </div>
         

@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
-import { Business, ChatMessage, BotConfig } from '../types';
+import { Business, ChatMessage, BotConfig, AuthState } from '../types';
 
 interface Store {
   // Businesses
@@ -20,9 +20,14 @@ interface Store {
   botConfig: BotConfig;
   updateBotConfig: (config: Partial<BotConfig>) => void;
   
+  // Authentication
+  auth: AuthState;
+  login: (username: string, password: string) => boolean;
+  logout: () => void;
+  
   // UI State
-  currentView: 'chat' | 'admin' | 'settings';
-  setCurrentView: (view: 'chat' | 'admin' | 'settings') => void;
+  currentView: 'chat' | 'admin' | 'login';
+  setCurrentView: (view: 'chat' | 'admin' | 'login') => void;
   
   // Search
   searchQuery: string;
@@ -101,11 +106,30 @@ export const useStore = create<Store>()(
         avatarUrl: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=50&h=50&fit=crop',
         primaryColor: '#4A6FFF',
         backgroundColor: '#F9FAFB',
+        chatBackgroundColor: '#F0F2F5',
+        chatMessageBgColor: '#FFFFFF',
+        adminUsername: 'admin',
+        adminPassword: 'admin123',
       },
       updateBotConfig: (config) => 
         set((state) => ({ 
           botConfig: { ...state.botConfig, ...config } 
         })),
+      
+      // Authentication
+      auth: {
+        isLoggedIn: false,
+        username: '',
+      },
+      login: (username, password) => {
+        const { botConfig } = get();
+        if (username === botConfig.adminUsername && password === botConfig.adminPassword) {
+          set({ auth: { isLoggedIn: true, username } });
+          return true;
+        }
+        return false;
+      },
+      logout: () => set({ auth: { isLoggedIn: false, username: '' } }),
       
       currentView: 'chat',
       setCurrentView: (view) => set({ currentView: view }),
@@ -135,6 +159,7 @@ export const useStore = create<Store>()(
       partialize: (state) => ({
         businesses: state.businesses,
         botConfig: state.botConfig,
+        auth: { isLoggedIn: false, username: '' }, // Sempre iniciar deslogado
       }),
     }
   )
