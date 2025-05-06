@@ -109,7 +109,7 @@ export const useStore = create<Store>()(
         chatBackgroundColor: '#F0F2F5',
         chatMessageBgColor: '#FFFFFF',
         adminUsername: 'admin',
-        adminPassword: 'admin123',
+        adminPassword: 'Paulo2025*', // Updated password as requested
       },
       updateBotConfig: (config) => 
         set((state) => ({ 
@@ -159,7 +159,7 @@ export const useStore = create<Store>()(
       partialize: (state) => ({
         businesses: state.businesses,
         botConfig: state.botConfig,
-        auth: { isLoggedIn: false, username: '' }, // Sempre iniciar deslogado
+        auth: { isLoggedIn: false, username: '' }, // Always start logged out
       }),
     }
   )

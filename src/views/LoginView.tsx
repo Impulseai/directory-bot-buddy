@@ -85,12 +85,6 @@ const LoginView: React.FC = () => {
                 Entrar
               </Button>
             </div>
-            
-            <div className="text-center text-sm text-gray-500 mt-4">
-              <p>Usuário padrão: admin</p>
-              <p>Senha padrão: admin123</p>
-              <p>Você pode alterar nas configurações</p>
-            </div>
           </form>
         </CardContent>
       </Card>
