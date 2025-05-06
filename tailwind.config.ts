@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom chatbot colors
+				chatbot: {
+					primary: '#4A6FFF',
+					secondary: '#34D399',
+					background: '#F9FAFB',
+					messageUser: '#E9EFFF',
+					messageBot: '#F3F4F6',
 				}
 			},
 			borderRadius: {
@@ -84,11 +93,36 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'typing': {
+					'0%': { width: '0' },
+					'100%': { width: '100%' }
+				},
+				'blink': {
+					'50%': { borderColor: 'transparent' }
+				},
+				'bounce-in': {
+					'0%': { transform: 'scale(0.9)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'typing': 'typing 1.5s steps(40, end)',
+				'blink': 'blink 0.7s step-end infinite',
+				'bounce-in': 'bounce-in 0.4s ease-out'
 			}
 		}
 	},
