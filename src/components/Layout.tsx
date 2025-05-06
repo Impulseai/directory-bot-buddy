@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, ListPlus, Settings } from 'lucide-react';
+import { MessageSquare, ListPlus, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LayoutProps {
@@ -27,6 +27,40 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   };
 
+  const handleDownload = () => {
+    // Create a link to download the project
+    const link = document.createElement('a');
+    link.href = 'https://github.com/yourusername/directory-bot-buddy/archive/refs/heads/main.zip';
+    link.download = 'directory-bot-buddy.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Alternative approach - create a JSZip archive of the project data
+    // This would only download the data, not the code
+    /*
+    import JSZip from 'jszip';
+    
+    const zip = new JSZip();
+    const { businesses, botConfig } = useStore.getState();
+    
+    // Add data to ZIP
+    zip.file("businesses.json", JSON.stringify(businesses, null, 2));
+    zip.file("botConfig.json", JSON.stringify(botConfig, null, 2));
+    
+    // Generate the ZIP file
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      // Create a link to download the ZIP
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = "directory-bot-data.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+    */
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
@@ -47,6 +81,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {botConfig.name} - Diretório de Comércios e Serviços
           </h1>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+          onClick={handleDownload}
+        >
+          <Download size={16} />
+          Baixar Projeto
+        </Button>
       </header>
 
       {/* Main Content */}
